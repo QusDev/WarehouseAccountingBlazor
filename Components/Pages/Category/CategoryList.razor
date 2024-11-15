@@ -1,0 +1,62 @@
+﻿@page "/category";
+@inject IBasicRepository<Category> repository;
+@inject NavigationManager navigation;
+
+<NavLink class="nav-link mt-2" href="/category/form">
+    <button class="btn btn-primary">Create category</button>
+</NavLink>
+
+@if (categories == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in categories)
+            {
+                <tr>
+                    <th scope="row">@category.Id</th>
+                    <td>@category.Name</td>
+                    <td>@category.Description</td>
+                    <td>
+                        <div class="mb-0">
+                            <button class="btn btn-primary" @onclick="@(() => OnUpdate(category.Id))">Update</button>
+                            <button class="btn btn-danger" @onclick="@(() => OnDelete(category.Id))">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    private List<Category> categories = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await repository.GetAllAsync();
+    }
+
+    public async Task OnDelete(int categoryId)
+    {
+        await repository.DeleteAsync(categoryId);
+        categories = await repository.GetAllAsync();
+    }
+
+    public void OnUpdate(int categoryId)
+    {
+        navigation.NavigateTo($"/category/form/{categoryId}");
+    }
+}

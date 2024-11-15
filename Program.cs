@@ -1,10 +1,16 @@
 using WarehouseAccountingBlazor.Components;
+using WarehouseAccountingBlazor.Entity;
+using WarehouseAccountingBlazor.Entity.Entities;
+using WarehouseAccountingBlazor.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddDbContext<WarehouseAccountingDbContext>();
+builder.Services.AddScoped(typeof(IBasicRepository<>), typeof(BasicRepository<>));
 
 var app = builder.Build();
 

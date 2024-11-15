@@ -2,7 +2,7 @@
 
 namespace WarehouseAccountingBlazor.Entity.Entities
 {
-    public class Transaction
+    public class Transaction : IEntity
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
